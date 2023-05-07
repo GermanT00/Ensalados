@@ -1,91 +1,47 @@
-//Inicializar el array de usuarios en sessionStorage si no existe
-if (!localStorage.getItem("usuarios")) {
-	localStorage.setItem("usuarios", JSON.stringify([]));
-}
-
-//Obtener el formulario de inicio de sesión
-var form = document.querySelector("form");
-
-//Agregar un evento de submit al formulario
-form.addEventListener("submit", function(event) {
-	event.preventDefault();
-
-	//Obtener el correo electrónico y la contraseña ingresados por el usuario
-	var email = document.getElementById("email").value;
-	var password = document.getElementById("password").value;
-
-	//Obtener el array de usuarios de localStorage
-	var usuarios = JSON.parse(localStorage.getItem("usuarios"));
-
-	//Buscar el usuario con el correo electrónico ingresado
-	var usuarioEncontrado = false;
-	var usuario;
-	for (var i = 0; i < usuarios.length; i++) {
-		if (usuarios[i].email === email) {
-			usuarioEncontrado = true;
-			usuario = usuarios[i];
-			break;
-		}
-	}
-
-	//Si el usuario no está registrado, mostrar un mensaje de error
-	if (!usuarioEncontrado) {
-		document.getElementById("message").textContent = "Usuario no registrado. Regístrate para crear una cuenta.";
-	}
-
-	//Si la contraseña no coincide, mostrar un mensaje de error
-	else if (usuario.password !== password) {
-		document.getElementById("message").textContent = "Usuario y/o contraseña incorrectos.";
-	}
-
-	//Si el inicio de sesión es exitoso, redirigir al usuario a la página de menú
-	else {
+ // Al cargar la página
+ window.onload = function() {
+	// Si hay un usuario en el local storage, mostrar su nombre y ocultar el formulario de inicio de sesión
+	if(localStorage.getItem("user")) {
+		let user = JSON.parse(localStorage.getItem("user"));
 		window.location.href = "../pages/menu.html";
 	}
-});
 
+	// Al hacer click en el botón de registrarse, mostrar el formulario de registro
+	document.getElementById("register-button").addEventListener("click", function(event) {
+		event.preventDefault();
+		document.getElementById("register-form").style.display = "block";
+	});
 
-//REGISTRO
+	// Al hacer submit en el formulario de registro, guardar el usuario en el local storage y mostrar el nombre
+	document.getElementById("register-form").addEventListener("submit", function(event) {
+		event.preventDefault();
+		let newUser = {
+			username: document.getElementById("new-username").value,
+			password: document.getElementById("new-password").value
+		};
+		localStorage.setItem("user", JSON.stringify(newUser));
+		window.location.href = "../pages/menu.html";
+	});
 
-//Inicializar el array de usuarios en localStorage si no existe
-if (!localStorage.getItem("usuarios")) {
-	localStorage.setItem("usuarios", JSON.stringify([]));
+	// Al hacer submit en el formulario de inicio de sesión, buscar el usuario en el local storage y mostrar su nombre
+	document.getElementById("login-form").addEventListener("submit", function(event) {
+		event.preventDefault();
+		let username = document.getElementById("username").value;
+		let password = document.getElementById("password").value;
+		let user = JSON.parse(localStorage.getItem("user"));
+		if(user && user.username === username && user.password === password) {
+			window.location.href = "../pages/menu.html";
+		} else {
+			alert("Nombre de usuario o contraseña incorrectos.");
+		}
+	});
 }
 
-//Obtener el formulario de registro
-var form = document.querySelector("form");
 
-//Agregar un evento de submit al formulario
-form.addEventListener("submit", function(event) {
-	event.preventDefault();
-
-	//Obtener los datos ingresados por el usuario
-	var nombre = document.getElementById("nombre").value;
-	var email = document.getElementById("email").value;
-	var password = document.getElementById("password").value;
-
-	//Obtener el array de usuarios de localStorage
-	var usuarios = JSON.parse(localStorage.getItem("usuarios"));
-
-	//Buscar si ya existe un usuario con el mismo correo electrónico
-	var usuarioExistente = false;
-	for (var i = 0; i < usuarios.length; i++) {
-		if (usuarios[i].email === email) {
-				usuarioExistente = true;
-				break;
-		}
-	}
-
-	// Si el usuario ya existe, mostrar un mensaje de error
-	if (usuarioExistente) {
-		document.getElementById("message").textContent = "Ya existe un usuario registrado con este correo electrónico.";
-	}
-
-	// Si el usuario no existe, agregarlo al array de usuarios y redirigir al usuario a la página de menú
-	else {
-		var nuevoUsuario = {nombre: nombre, email: email, password: password};
-		usuarios.push(nuevoUsuario);
-		localStorage.setItem("usuarios", JSON.stringify(usuarios));
-		window.location.href = "../pages/menu.html";
-	}
+const btnSalir = document.getElementById('btn-salir');
+btnSalir.addEventListener('click', function() {
+  // Borramos todos los datos del local storage
+  localStorage.clear();
+  // Redirigimos a la página index.html
+  window.location.href = "./index.html";
 });

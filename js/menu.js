@@ -1,66 +1,84 @@
-let base = prompt("Seleccione una base para su ensalada:\n1. Lechuga\n2. Lechuga y rúcula\n3. Sin base");
-let ingredientes = prompt("Seleccione los ingredientes para su ensalada, separados por comas (,):\nHuevo, Tomate, Crutones, Cebolla, Pepinos, Arvejas, Fideos, Arroz");
-let proteina = prompt("Seleccione una proteína para su ensalada:\n1. Atún\n2. Pollo\n3. Pescado\n4. Tofu\n5. Sin proteína");
-let salsa = prompt("Seleccione una salsa para su ensalada:\n1. Salsa César\n2. Vinagre\n3. Aceite\n4. Sin salsa");
+function actualizarEnsalada() {
+  // Obtener los valores de los inputs
+  const lechuga = Number(document.getElementById('lechuga').value);
+  const arroz = Number(document.getElementById('arroz').value);
+  const porotos = Number(document.getElementById('porotos').value);
 
-let baseSeleccionada;
-let ingredientesSeleccionados = [];
-let proteinaSeleccionada;
-let salsaSeleccionada;
+  // Calcular el peso y el precio de cada ingrediente
+  const pesoLechuga = lechuga * 50;
+  const precioLechuga = pesoLechuga * 2.2;
 
-switch (base) {
-  case "1":
-    baseSeleccionada = "Lechuga";
-    break;
-  case "2":
-    baseSeleccionada = "Lechuga y rúcula";
-    break;
-  case "3":
-    baseSeleccionada = "Sin base";
-    break;
-  default:
-    alert("Base seleccionada no válida");
+  const pesoArroz = arroz * 50;
+  const precioArroz = pesoArroz * 2.2;
+
+  const pesoPorotos = porotos * 50;
+  const precioPorotos = pesoPorotos * 2.2;
+
+  // Calcular el peso total y el precio de la ensalada completa
+  const pesoTotal = pesoLechuga + pesoArroz + pesoPorotos;
+  const precioTotal = pesoTotal * 2.2;
+
+  // Actualizar el HTML con los valores calculados
+  document.getElementById('lechuga').textContent = pesoLechuga + ' gramos';
+  document.getElementById('arroz').textContent = pesoArroz + ' gramos';
+  document.getElementById('porotos').textContent = pesoPorotos + ' gramos';
+
+  document.getElementById('peso-total').textContent = pesoTotal + ' gramos';
+  document.getElementById('precio-total').textContent = '$' + precioTotal.toFixed(2);
 }
 
-if (ingredientes) {
-  ingredientesSeleccionados = ingredientes.split(",");
+const inputs = document.querySelectorAll('input[type="number"]');
+inputs.forEach(input => {
+  input.addEventListener('change', actualizarEnsalada);
+});
+
+const btnSalir = document.getElementById('btn-salir');
+btnSalir.addEventListener('click', function() {
+  // Borramos todos los datos del local storage
+  localStorage.clear();
+  // Redirigimos a la página index.html
+  window.location.href = "../index.html";
+});
+
+// Array donde se guardarán las ensaladas
+let ensaladas = [];
+
+// Función para guardar la ensalada en el array y limpiar los campos
+function guardarEnsalada() {
+  const lechuga = Number(document.getElementById('lechuga').value);
+  const arroz = Number(document.getElementById('arroz').value);
+  const porotos = Number(document.getElementById('porotos').value);
+  
+  ensaladas.push({ lechuga, arroz, porotos });
+
+  // Limpiar los campos
+  document.getElementById('lechuga').value = '';
+  document.getElementById('arroz').value = '';
+  document.getElementById('porotos').value = '';
+  document.getElementById('peso-total').value = '';
+  document.getElementById('precio-total').value = '';
+
+  localStorage.setItem('ensaladas', JSON.stringify(ensaladas));
 }
 
-switch (proteina) {
-  case "1":
-    proteinaSeleccionada = "Atún";
-    break;
-  case "2":
-    proteinaSeleccionada = "Pollo";
-    break;
-  case "3":
-    proteinaSeleccionada = "Pescado";
-    break;
-  case "4":
-    proteinaSeleccionada = "Tofu";
-    break;
-  case "5":
-    proteinaSeleccionada = "Sin proteína";
-    break;
-  default:
-    alert("Proteína seleccionada no válida");
+function mostrarEnsaladas() {
+  const ensaladasGuardadas = JSON.parse(localStorage.getItem('ensaladas')) || [];
+  let listaEnsaladas = '';
+  
+  if (ensaladasGuardadas.length > 0) {
+    ensaladasGuardadas.forEach((ensalada, index) => {
+      const numeroEnsalada = index + 1;
+      listaEnsaladas += `<li>Ensalada ${numeroEnsalada}: ${ensalada.lechuga} gramos de lechuga, ${ensalada.arroz} gramos de arroz, ${ensalada.porotos} gramos de porotos</li>`;
+    });
+  } else {
+    listaEnsaladas = '<li>No hay ensaladas guardadas</li>';
+  }
+  
+  document.getElementById('lista-ensaladas').innerHTML = listaEnsaladas;
 }
 
-switch (salsa) {
-  case "1":
-    salsaSeleccionada = "Salsa César";
-    break;
-  case "2":
-    salsaSeleccionada = "Vinagre";
-    break;
-  case "3":
-    salsaSeleccionada = "Aceite";
-    break;
-  case "4":
-    salsaSeleccionada = "Sin salsa";
-    break;
-  default:
-    alert("Salsa seleccionada no válida");
-}
 
-alert("Ha seleccionado la siguiente ensalada:\n\nBase: " + baseSeleccionada + "\nIngredientes: " + ingredientesSeleccionados.join(", ") + "\nProteína: " + proteinaSeleccionada + "\nSalsa: " + salsaSeleccionada);
+// Evento para el botón "Guardar ensalada"
+document.getElementById('guardar').addEventListener('click', guardarEnsalada);
+document.getElementById('ver-ensaladas').addEventListener('click', mostrarEnsaladas);
+

@@ -1,18 +1,50 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
+<html>
+  <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Ensaladas Veganas</title>
     <link rel="stylesheet" href="../css/estilos.css">
-</head>
-<body>
-    <div class="logo">
-		<img src="../img/logo.png" alt="">
-		<h1>Ensalados - ensaladas 100% veganas y saludables</h1>
-	</div>
-    <h1>Beinvenido al menu, crea tu ensalada!</h1>
+  </head>
+  <body>
+    <header>
+      <div class="headerLogo">
+        <img src="../img/logo.png" alt="">
+        <h1>100% vegan</h1>
+      </div>
+      <div class="headerMenu">
+        <ul>
+          <li><a href="#">Inicio</a></li>
+          <li><a href="#">Menu</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="headerOpcion">
+        <button id="btn-salir">Salir</button>
+      </div>
+    </header>
+    <h2>Arma tu ensalada</h2>
+    <label for="lechuga">Lechuga (en 50g)</label>
+<input type="number" id="lechuga" />
+
+<label for="arroz">Arroz (en 50g)</label>
+<input type="number" id="arroz" />
+
+<label for="porotos">Porotos (en 50g)</label>
+<input type="number" id="porotos" />
+
+<p> Peso total: <span id="peso-total"></span> </p>
+<p> Precio total: <span id="precio-total"></span> </p>
+    <div>
+      <p id="ensalada"></p>
+      <p id="peso-total"></p>
+      
+    </div>
+    <button id="guardar">Realizar pedido</button>
+    <button id="ver-ensaladas">Ver mis ensaladas</button>
+
+    <ul id="lista-ensaladas"></ul>
+
+    <div id="pedidos"></div>
     <script src="../js/menu.js"></script>
-</body>
+  </body>
 </html>
